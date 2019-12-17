@@ -1,0 +1,12 @@
+html
+    head
+        meta(charset="utf-8")
+        title=_title
+    body
+        form(action='/topic' method='post')
+            p
+                input(type='text' name='title' placeholeder='title')
+            p
+                textarea(name="description" placeholeder='description')
+            p
+                input(type='submit')

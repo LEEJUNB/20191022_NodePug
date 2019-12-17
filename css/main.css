@@ -1,0 +1,15 @@
+.p1 {
+    border : red solid;
+}
+
+.p2 {
+    border : 10px solid;
+}
+
+.p3 {
+    border : 10px red;
+}
+
+.p4 {
+    border : red double;
+}
