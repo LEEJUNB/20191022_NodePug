@@ -1,9 +1,12 @@
-html   
+html
     head
         meta(charset='utf-8')
     body
-        h1  DataFiles List
+        h1  Datafolder List
         ul
             each topic in topics
                 li
                     a(href='/topic/' + topic)= topic
+            article
+                h2= title
+                = description

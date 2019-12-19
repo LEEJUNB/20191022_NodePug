@@ -52,6 +52,25 @@ app.get('/topic', function(req,res){
     })
 })
 
+// 게시글 제목을 클릭했을 때 제목과 내용이 뜨도록 만들자
+// 마치 네이버 블로그글 처럼
+app.get('/topic/:id', function(req,res){
+    var id = req.params.id;
+    fs.readdir('data', function(err,files){
+        if(err){
+            console.log(err);
+            res.status(500).send('Internal Server Error');
+        }
+        fs.readFile('data/'+id ,'utf8', function(err,data){
+            if(err){
+                console.log(err);
+                res.status(500).send('Internal Server Error');
+            }
+            res.render('viewBoard', {topics:files, title:id, description:data});
+        })
+    })
+})
+
 // server waiting
 app.listen(port, function(){
     console.log(`Revolution Start ${port}`);
