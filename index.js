@@ -5,12 +5,12 @@ const bodyParser = require('body-parser');
 const fs = require('fs');
 
 app.use(bodyParser.urlencoded({extended:false}));
-
 app.locals.pretty = true;
+
 app.set('view engine','pug');
 app.set('views','./views');
 
-app.use(express.static('public'));
+//app.use(express.static('public'));
 
 // homepage
 app.get('/', function(req,res){
@@ -24,7 +24,13 @@ app.get('/login', function(req,res){
 
 // write page
 app.get('/board', function(req,res){
-    res.render('board'); // board.pug
+    fs.readdir('data',function(err,files){
+        if(err){
+            console.log(err);
+            res.status(500).send('Interver Server Error');
+        }
+        res.render('board', {topics:files}); // board.pug
+    })
 })
 
 // write complete page
@@ -37,30 +43,22 @@ app.post('/topic', function(req,res){ // board.pug -> post route is '/topic'
         if(err){
             res.status(500).send('Internal server error');
         }
-        res.send('Success ' + req.body.title);
+        res.send('Success!!  ' + req.body.title); // 작성한 글 페이지로 이동
     })
 });
 
-// get version
-app.get('/topic', function(req,res){
+// get method : url통해 /topic으로 접근가능
+// 글 목록이 화면에 표시된다.
+app.get(['/topic','/topic/:id'], function(req,res){
     fs.readdir('data',function(err,files){
         if(err){
             console.log(err);
             res.status(500).send('Internal Server Error');
         }
-        res.render('viewBoard', {topics:files});
-    })
-})
-
-// 게시글 제목을 클릭했을 때 제목과 내용이 뜨도록 만들자
-// 마치 네이버 블로그글 처럼
-app.get('/topic/:id', function(req,res){
-    var id = req.params.id;
-    fs.readdir('data', function(err,files){
-        if(err){
-            console.log(err);
-            res.status(500).send('Internal Server Error');
-        }
+        var id = req.params.id;
+        if(id){
+        // 게시글 제목을 클릭했을 때 제목과 내용이 뜨도록 만들자
+        // 마치 네이버 블로그글 처럼
         fs.readFile('data/'+id ,'utf8', function(err,data){
             if(err){
                 console.log(err);
@@ -68,8 +66,11 @@ app.get('/topic/:id', function(req,res){
             }
             res.render('viewBoard', {topics:files, title:id, description:data});
         })
+        } else {
+        res.render('viewBoard', {topics:files, title:'Welcome', description:'Hello Man'}); // view is filename, topics(변수)를 통해 files인자(파일들을 배열화시킨 것)를 가져온다.
+        }
     })
-})
+});
 
 // server waiting
 app.listen(port, function(){
