@@ -3,6 +3,8 @@ const app = express();
 const port = 3333;
 const bodyParser = require('body-parser');
 const fs = require('fs');
+const multer = require('multer');
+const upload = multer({dest:'uploads/'});
 
 app.use(bodyParser.urlencoded({extended:false}));
 app.locals.pretty = true;
