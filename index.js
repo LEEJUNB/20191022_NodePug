@@ -4,7 +4,7 @@ const port = 3333;
 const bodyParser = require('body-parser');
 const fs = require('fs');
 const multer = require('multer');
-const upload = multer({dest:'uploads/'});
+const upload = multer({dest:'uploads/'}); // dest(파일저장위치)
 
 app.use(bodyParser.urlencoded({extended:false}));
 app.locals.pretty = true;
@@ -73,6 +73,18 @@ app.get(['/topic','/topic/:id'], function(req,res){
         }
     })
 });
+
+// upload page
+app.get('/upload',function(req,res){
+    res.render('upload');
+})
+
+// single의 인자는 해당 input타입의 name명이다.
+// 그리고 이 인자의 단수 파일을 전달받아 req.file에 저장된다.
+app.post('/upload', upload.single('userfile'), function(req,res){
+    console.log(req.file);
+    res.send('uploaded : ' +req.file.filename);
+})
 
 // server waiting
 app.listen(port, function(){
