@@ -4,15 +4,24 @@ const port = 3333;
 const bodyParser = require('body-parser');
 const fs = require('fs');
 const multer = require('multer');
-const upload = multer({dest:'uploads/'}); // dest(파일저장위치)
+const _storage = multer.diskStorage({
+    destination : function(req,file,cb){
+        cb(null, 'uploads/') // 파일 저장 경로
+    },
+    filename : function(req,file,cb){
+        cb(null, file.originalname); // 파일 제목 지정
+    }
+})
+const upload = multer({storage:_storage}); // dest(파일저장위치)
 
+app.use(express.static('uploads'));
 app.use(bodyParser.urlencoded({extended:false}));
 app.locals.pretty = true;
 
 app.set('view engine','pug');
 app.set('views','./views');
 
-//app.use(express.static('public'));
+
 
 // homepage
 app.get('/', function(req,res){
