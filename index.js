@@ -3,8 +3,8 @@ const app = express();
 const port = 3333;
 const bodyParser = require('body-parser');
 const fs = require('fs');
-const multer = require('multer');
-const _storage = multer.diskStorage({
+const multer = require('multer'); // Save the upload file
+const _storage = multer.diskStorage({ 
     destination : function(req,file,cb){
         cb(null, 'uploads/') // 파일 저장 경로
     },
@@ -20,8 +20,6 @@ app.locals.pretty = true;
 
 app.set('view engine','pug');
 app.set('views','./views');
-
-
 
 // homepage
 app.get('/', function(req,res){
